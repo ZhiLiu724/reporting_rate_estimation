@@ -1,0 +1,14 @@
+data/*
+aggdfs_clean/*
+stan_output/*
+standata_chains/*
+.DS_Store
+.ipynb_checkpoints/
+__pycache__/
+*/__pycache__/*
+stan_modeling/models/*.hpp
+zhi.ipynb
+
+.conda/
+
+prep_sample_data.ipynb

@@ -1,0 +1,11 @@
+prefix=/Users/zliu/Desktop/Trees_project/estimate_underreporting/underreporting_estimation/.conda
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+toolexeclibdir=${libdir}
+includedir=/Users/zliu/Desktop/Trees_project/estimate_underreporting/underreporting_estimation/.conda/include
+
+Name: libffi
+Description: Library supporting Foreign Function Interfaces
+Version: 3.4.4
+Libs: -L${toolexeclibdir} -lffi
+Cflags: -I${includedir}

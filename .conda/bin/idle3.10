@@ -1,5 +1,0 @@
-#!/Users/zliu/Desktop/Trees_project/estimate_underreporting/underreporting_estimation/.conda/bin/python3.10
-
-from idlelib.pyshell import main
-if __name__ == '__main__':
-    main()

@@ -26,7 +26,7 @@ For an example, see `./sample_data/sample_reports_df.csv`, which contains servic
 
 #### Running the reproduction
 
-See `sample_usage.ipynb` for an extended demonstration. We provide xxx main functions along the reproduction pipeline:
+See `sample_usage.ipynb` for an extended demonstration. We provide 4 main functions along the reproduction pipeline:
 
 `create_incidents_df`: from the raw reports data, generates a dataframe such that one row corresponds to one incident, and contains the observation interval length for the incident, the number of duplicate reports observed in that interval, and various covariates of the incident.
 

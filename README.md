@@ -1,8 +1,10 @@
 # Estimating reporting rate in crowdsourcing systems
 
-This repository helps reproduce the results of [Liu, Bhandaram, and Garg(2023)](https://arxiv.org/abs/2204.08620) on other crowdsourcing settings. Assuming that reports are generated according to a Poisson process model with unknown rate, we leverage duplicate reports about one incident to learn the reporting rate as a function of incident characteristics, and further estimate the average reporting delay (time between the incident taking place and the first report came in) for each incident.
+This repository contains code to apply the method of [Liu, Bhandaram, and Garg(2023)](https://arxiv.org/abs/2204.08620) to other crowdsourcing settings.
 
-#### Prerequisite
+Assuming that reports are generated according to a Poisson process model with unknown rate, we leverage duplicate reports about one incident to learn the reporting rate as a function of incident characteristics, and further estimate the average reporting delay (time between the incident taking place and the first report came in) for each incident.
+
+#### Usage
 
 ###### Installing the required packages
 
@@ -14,19 +16,18 @@ conda activate <env>
 These commands will create a new `conda` environment with all the packages needed. Tested on a machine with `conda 23.1.0`. 
 
 ###### Preparing raw reports data
-
-The raw data containing the reports needs to be minimally processed. Crucially, the following columns are required:
+You can start with a data frame that contains the raw reports. Each report is a row, and the following columns are required:
 
 - A column that identifies unique incidents: multiple reports on the same incident should have the same ID along this column. 
-- A column that contains the time that each reports were received. 
-- A column that contains at least one time stamp for each incident, that we know after this time no reports will be submitted about such incident. This could be the actual resolution time of the incident. 
+- A column that contains the time that each report was received. 
+- A column that contains at least one time stamp for each incident, that we know after this time no reports will be submitted about such incident. This could be the actual resolution time of the incident. If such a column is not available, you may add a constant time length after the first report for that unique incident.
 - Column(s) that indicate the various characteristics of an incident, that may influence the reporting rate. These could be either categorical or continuous.
 
 For an example, see `./sample_data/sample_reports_df.csv`, which contains service requests made to NYC Parks Department on street trees through the NYC311 system.
 
-#### Running the reproduction
+#### Applying the method
 
-See `sample_usage.ipynb` for an extended demonstration. We provide 4 main functions along the reproduction pipeline:
+See `sample_usage.ipynb` for an extended demonstration. We provide 4 main functions along the usage pipeline:
 
 `create_incidents_df`: from the raw reports data, generates a dataframe such that one row corresponds to one incident, and contains the observation interval length for the incident, the number of duplicate reports observed in that interval, and various covariates of the incident.
 

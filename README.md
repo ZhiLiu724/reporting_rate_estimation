@@ -1,6 +1,6 @@
 # Estimating reporting rate in crowdsourcing systems
 
-This repository contains code to apply the method of [Liu, Bhandaram, and Garg(2023)](https://arxiv.org/abs/2204.08620) to other crowdsourcing settings.
+This repository contains code to apply the method of [Liu, Bhandaram, and Garg(2023)](https://arxiv.org/abs/2204.08620) to other crowdsourcing settings. If you use this package in a research paper, please cite the above paper (and email us -- we'd love to know!).
 
 Assuming that reports are generated according to a Poisson process model with unknown rate, we leverage duplicate reports about one incident to learn the reporting rate as a function of incident characteristics, and further estimate the average reporting delay (time between the incident taking place and the first report came in) for each incident.
 

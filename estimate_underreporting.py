@@ -18,7 +18,7 @@ def calculate_observation_start_end_time(df,
     ----------
     df : pandas.DataFrame
         the raw reports dataframe
-    incident_identifier_col : str
+    incident_identifier_col : list of str
         the column name for the incident identifier
     observation_end_col : list of str
         the column name for the observation end time
@@ -26,6 +26,7 @@ def calculate_observation_start_end_time(df,
         the maximum duration of the observation interval, in days
     """
     cols_to_agg = observation_start_col + observation_end_col
+
     agg_methods = observation_start_agg_method + observation_end_agg_method
     agg_dict = dict(zip(cols_to_agg, agg_methods))
 
@@ -68,30 +69,30 @@ def create_incidents_df(reports_df,
     ----------
     reports_df: pandas.DataFrame
         the raw reports dataframe
-    reports_identifier_col: list of str
+    reports_identifier_col: str, or list of str
         the column name of the report identifier; if not specified, the index of the dataframe will be used
-    incident_identifier_col: list of str
+    incident_identifier_col: str, or list of str
         the column name of the incident identifier, needs to be specified to identify unique incidents
-    observation_start_col: list of str
+    observation_start_col: str, or list of str
         the column name of the observation start time, needs to be specified to identify start time of observation interval, within a unique incident
-    observation_start_agg_method: list of str
+    observation_start_agg_method: str, or list of str
         the aggregation method for the observation start time, available options are 'min', 'max', 'mean', 'median', 'first', 'last'
         if not specified, 'min' will be used for all columns
-    observation_end_col: list of str
+    observation_end_col: str, or list of str
         the column name of the observation end time, needs to be specified to identify end time of observation interval, within a unique incident
-    observation_end_agg_method: list of str
+    observation_end_agg_method: str, or list of str
         the aggregation method for the observation end time, available options are 'min', 'max', 'mean', 'median', 'first', 'last'
         if not specified, 'min' will be used for all columns
     max_duration: int
         the maximum duration of the observation interval in days, default is 100 days
-    covariates_cont: list of str
+    covariates_cont: str, or list of str
         the column names of the continuous covariates included in the model
-    covariates_cont_agg_method: list of str
+    covariates_cont_agg_method: str, or list of str
         the aggregation method for the continuous covariates, available options are 'min', 'max', 'mean', 'median', 'first', 'last'
         if not specified, 'first' will be used for all columns
-    covariates_cat: list of str
+    covariates_cat: str, or list of str
         the column names of the categorical covariates included in the model
-    covariates_cat_agg_method: list of str
+    covariates_cat_agg_method: str, or list of str
         the aggregation method for the categorical covariates, available options are 'first', 'last', 'mode'
         if not specified, 'first' will be used for all columns
     dropna: bool
@@ -101,13 +102,21 @@ def create_incidents_df(reports_df,
     """
 
     assert isinstance(reports_df, pd.DataFrame), "reports_df must be a pandas.DataFrame"
-    assert isinstance(reports_identifier_col, list) or reports_identifier_col is None, "reports_identifier_col must be a list or None"
-    assert isinstance(incident_identifier_col, list), "incident_identifier_col must be a string"
-    assert isinstance(observation_start_col, list), "observation_start_col must be a list"
+    assert isinstance(incident_identifier_col, list) or isinstance(incident_identifier_col, str),  "incident_identifier_col must be a string or a list of strs"
+    if isinstance(incident_identifier_col, str):
+        incident_identifier_col = [incident_identifier_col]
+
+    assert isinstance(observation_start_col, list) or isinstance(observation_start_col, str),"observation_start_col must be a str or list of strs"
+    if isinstance(observation_start_col, str):
+        observation_start_col = [observation_start_col]
+
     if observation_start_agg_method is None:
         observation_start_agg_method = ['min'] * len(observation_start_col)
     
-    assert isinstance(observation_end_col, list), "observation_end_col must be a list"
+    assert isinstance(observation_end_col, list) or isinstance(observation_end_col, str), "observation_end_col must be a str or list of strs"
+    if isinstance(observation_end_col, str):
+        observation_end_col = [observation_end_col]
+    
     if observation_end_agg_method is None:
         observation_end_agg_method = ['min'] * len(observation_end_col)
     
@@ -115,12 +124,16 @@ def create_incidents_df(reports_df,
     assert covariates_cat is not None or covariates_cont is not None, "at least one covariate must be specified"
 
     if covariates_cont is not None:
-        assert isinstance(covariates_cont, list), "covariates_cont must be a list"
+        assert isinstance(covariates_cont, list) or isinstance(covariates_cont, str), "covariates_cont must be a str or list of strs"
+        if isinstance(covariates_cont, str):
+            covariates_cont = [covariates_cont]
         if covariates_cont_agg_method is None:
             covariates_cont_agg_method = ['first'] * len(covariates_cont)
     
     if covariates_cat is not None:
-        assert isinstance(covariates_cat, list), "covariates_cat must be a list"
+        assert isinstance(covariates_cat, list) or isinstance(covariates_cat, str), "covariates_cat must be a str or list of strs"
+        if isinstance(covariates_cat, str):
+            covariates_cat = [covariates_cat]
         if covariates_cat_agg_method is None:
             covariates_cat_agg_method = ['first'] * len(covariates_cat)
     
@@ -191,14 +204,18 @@ def prepare_data_for_regression(incidents_df,
     ----------
     incidents_df: pandas.DataFrame
         the incidents dataframe, generated by create_incidents_df
-    covariate_cont: list of str
+    covariate_cont: str, or list of str
         the column names of the continuous covariates included in the model
-    covariate_cat: list of str
+    covariate_cat: str, or list of str
         the column names of the categorical covariates included in the model
     """
     assert isinstance(incidents_df, pd.DataFrame), "incidents_df must be a pandas.DataFrame"
     assert isinstance(covariate_cat, str) or isinstance(covariate_cat, list), "covariate_cat must be a string or list"
+    if isinstance(covariate_cat, str):
+        covariate_cat = [covariate_cat]
     assert isinstance(covariate_cont, str) or isinstance(covariate_cont, list), "covariate_cont must be a string or list"
+    if isinstance(covariate_cont, str):
+        covariate_cont = [covariate_cont]
     assert covariate_cat is not None or covariate_cont is not None, "at least one covariate must be specified"
     assert all([col in incidents_df.columns for col in covariate_cat]), "covariate_cat must be a column in incidents_df"
     assert all([col in incidents_df.columns for col in covariate_cont]), "covariate_cont must be a column in incidents_df"

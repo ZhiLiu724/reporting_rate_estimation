@@ -1,4 +1,4 @@
-# Estimating reporting rate in crowdsourcing systems
+# Estimating reporting rate in crowdsourcing systems [![DOI](https://zenodo.org/badge/700630223.svg)](https://zenodo.org/doi/10.5281/zenodo.10086345)
 
 This repository contains code to apply the method of [Liu, Bhandaram, and Garg(2023)](https://arxiv.org/abs/2204.08620) to other crowdsourcing settings. If you use this package in a research paper, please cite the above paper (and email us -- we'd love to know!).
 
